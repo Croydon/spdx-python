@@ -13,11 +13,11 @@ _license_path = os.path.join(os.path.dirname(__file__), 'data')
 with open(os.path.join(_license_path, 'db.json')) as f:
     db = json.load(f)
     _licenses = db['licenses']
-    __version__ = db['version']
+    __version__ = db['licenseListVersion']
     del db
 
 def _get_license(tmpl_name):
-    path = os.path.join(_license_path, tmpl_name)
+    path = os.path.join(_license_path, tmpl_name, '.txt')
     try:
         with open(path, encoding='utf-8') as f:
             return f.read()
@@ -43,28 +43,20 @@ class License:
 
     @property
     def id(self):
-        return self.__data['id']
+        return self.__data['licenseId']
 
     @property
     def sources(self):
-        return self.__data['sources']
-
-    @property
-    def notes(self):
-        return self.__data['notes']
+        return self.__data['seeAlso']
 
     @property
     def osi_approved(self):
-        return self.__data['osi_approved']
-
-    @property
-    def header(self):
-        return self.__data['header']
+        return self.__data['isOsiApproved']
 
     @property
     def template(self):
         if self.__template is None:
-            self.__template = _get_license(self.__data['template'])
+            self.__template = _get_license(self.__data['name'])
         return self.__template
 
 def licenses():
